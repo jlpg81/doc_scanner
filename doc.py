@@ -3,9 +3,10 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import Tk, StringVar, Label
-import os
+import os, sys
 from PIL import Image, ImageTk
 import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r'Tesseract-OCR\tesseract.exe'
 
 #Functions
 def fileDialog():
@@ -32,6 +33,20 @@ def saveFile():
     text_file.write(content)
     text_file.close()
 
+def info_window():
+    newwin = Toplevel(root)
+    display = Label(newwin, width=25, height=10, text="Program created by Jorge Perez \n\n jorgeperezgomez.com")
+    display.pack()
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 #GUI Start
 root=tk.Tk()
 root.title("Doc Scanner")
@@ -40,15 +55,10 @@ root.geometry("+50+50")
 
 #Icons
 image_size = (70,70)
-open_icon = ImageTk.PhotoImage(Image.open("open.png").resize(image_size))
-scan_icon = ImageTk.PhotoImage(Image.open("scan.png").resize(image_size))
-save_icon = ImageTk.PhotoImage(Image.open("save.png").resize(image_size))
-info_icon = ImageTk.PhotoImage(Image.open("info.png").resize(image_size))
-
-def info_window():
-    newwin = Toplevel(root)
-    display = Label(newwin, width=25, height=10, text="Program created by Jorge Perez \n\n jorgeperezgomez.com")
-    display.pack()
+open_icon = ImageTk.PhotoImage(Image.open(resource_path("open.png")).resize(image_size))
+scan_icon = ImageTk.PhotoImage(Image.open(resource_path("scan.png")).resize(image_size))
+save_icon = ImageTk.PhotoImage(Image.open(resource_path("save.png")).resize(image_size))
+info_icon = ImageTk.PhotoImage(Image.open(resource_path("info.png")).resize(image_size))
 
 #Left Buttons
 ttk.Button(root, text = "Open", image=open_icon, command = fileDialog, compound = TOP).place(x=5, y=5, height=100, width=100)
